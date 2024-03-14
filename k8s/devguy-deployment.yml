@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devguy-deployment
+  labels:
+    component: devguy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: devguy
+  template:
+    metadata:
+      labels:
+        component: devguy
+    spec:
+      containers:
+        - name: devguy
+          image: jakethecoder95/devguy:v0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
