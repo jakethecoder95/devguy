@@ -1,0 +1,12 @@
+name: CI Pipeline
+run-name: Building "${{ github.event.head_commit.message }}" by {{ github.actor }}
+on: [push]
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5.0.0
+      - name: Build
+        working-directory: ./app
+        run: go build main.go && ls
