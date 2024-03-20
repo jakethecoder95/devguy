@@ -1,6 +1,9 @@
 name: CI Pipeline
 run-name: Building "${{ github.event.head_commit.message }}" by {{ github.actor }}
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
@@ -9,4 +12,7 @@ jobs:
       - uses: actions/setup-go@v5.0.0
       - name: Build
         working-directory: ./app
-        run: go build main.go && ls
+        run: go build main.go
+      - name: Test
+        working-directory: ./app
+        run: go test
