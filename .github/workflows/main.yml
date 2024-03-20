@@ -1,5 +1,5 @@
 name: CI Pipeline
-run-name: Building "${{ github.event.head_commit.message }}" by ${{ github.actor }}
+run-name: ${{ github.event.head_commit.message }} - ${{ github.actor }}
 on:
   push:
     branches:
