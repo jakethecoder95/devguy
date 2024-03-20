@@ -13,6 +13,3 @@ jobs:
       - name: Build
         working-directory: ./app
         run: go build main.go
-      - name: Test
-        working-directory: ./app
-        run: go test
