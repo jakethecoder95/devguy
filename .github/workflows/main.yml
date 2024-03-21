@@ -1,17 +1,59 @@
 name: CI Pipeline
 run-name: ${{ github.event.head_commit.message }} - ${{ github.actor }}
+
 on:
   push:
     branches:
       - main
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: devguy-cluster-1    # Add your cluster name here.
+  GKE_ZONE: us-central1-c   # Add your cluster zone here.
+  IMAGE: devguy
+  IMAGE_TAG: latest
+  GAR_ZONE: us-central1
+  GAR_REPO: devguy
+
 jobs:
   build-test-deploy:
+    name: Build, Test, and Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5.0.0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5.0.0
         with:
           go-version: '1.22'
+
       - name: Build
         working-directory: ./app
         run: go build main.go
+
+      - name: Test
+        working-directory: ./app
+        run: echo "TODO - Write Tests"
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+      # Configure Docker to use the gcloud command-line tool as a credential
+      # helper for authentication
+      - name: Docker configuration
+        run: |-
+          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://$GAR_ZONE-docker.pkg.dev
+
+      - name: Publish
+        run: |-
+          docker build \
+            --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" \
+        run: |-
+          docker push "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG"
+
+      - name: Deploy
+        run: echo "TODO - Deploy"
