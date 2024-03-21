@@ -10,8 +10,8 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: devguy-cluster-1    # Add your cluster name here.
   GKE_ZONE: us-central1-c   # Add your cluster zone here.
-  IMAGE: devguy
-  IMAGE_TAG: latest
+  IMAGE: jakethecoder95/devguy
+  IMAGE_TAG: v0
   GAR_ZONE: us-central1
   GAR_REPO: devguy
 
@@ -58,4 +58,6 @@ jobs:
           docker push "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG"
 
       - name: Deploy
-        run: echo "TODO - Deploy"
+        run: |-
+          kubectl apply -f k8s
+          kubectl get pods
