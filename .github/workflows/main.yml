@@ -11,7 +11,7 @@ env:
   GKE_CLUSTER: devguy-cluster-1    # Add your cluster name here.
   GKE_ZONE: us-central1-c   # Add your cluster zone here.
   IMAGE: jakethecoder95/devguy
-  IMAGE_TAG: v0
+  IMAGE_TAG: latest
   GAR_ZONE: us-central1
   GAR_REPO: devguy
 
