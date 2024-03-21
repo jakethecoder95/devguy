@@ -47,18 +47,11 @@ jobs:
           gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://$GAR_ZONE-docker.pkg.dev
 
       - name: Publish
-        working-directory: ./app
-        run: |-
-          docker build \
-            --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG" \
-            --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$GITHUB_SHA" \
-            --build-arg GITHUB_SHA="$GITHUB_SHA" \
-            --build-arg GITHUB_REF="$GITHUB_REF" \
-            .
-      - run: |-
-          docker push "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG"
+        working-directory: ./scripts
+        run: ./docker-build.sh
 
       - name: Deploy
         run: |-
-          kubectl apply -f k8s
-          kubectl get pods
+          echo "TODO - Deploy"
+          # kubectl apply -f k8s
+          # kubectl get pods
