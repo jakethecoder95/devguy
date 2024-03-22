@@ -42,6 +42,7 @@ jobs:
       - name: Set up GKE credentials
         uses: google-github-actions/get-gke-credentials@v2
         with:
+          project_id: ${{ env.PROJECT_ID }}
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
 
@@ -50,9 +51,6 @@ jobs:
       - name: Docker configuration
         run: |-
           gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://$GAR_ZONE-docker.pkg.dev
-          gcloud config set project devguy
-          gcloud config set compute/zone us-central1
-          gcloud container clusters get-credentials devguy
 
       - name: Deploy
         run: ./.github/scripts/docker-build.sh
