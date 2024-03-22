@@ -1,5 +1,5 @@
 #!/bin/bash
-docker buildx buikd \
+docker buildx build \
   --platform "linux/amd64" \
   --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:latest" \
   --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$GITHUB_SHA" \
