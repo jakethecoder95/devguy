@@ -17,6 +17,15 @@ spec:
       containers:
         - name: devguy
           image: jakethecoder95/devguy:v0
+          resources:
+            requests:
+              cpu: 50m
+              memory: 1Mi
+              ephemeral-storage: 1Mi
+            limit:
+              cpu: 100m
+              memory: 2Mi
+              ephemeral-storage: 2Mi
           ports:
             - containerPort: 8080
           env:
