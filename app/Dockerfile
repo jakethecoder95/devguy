@@ -1,7 +1,10 @@
-FROM golang:1.22 as builder
+FROM golang:1.22-alpine as builder
 WORKDIR '/app'
 COPY ./main.go ./
 COPY ./index.html ./
-RUN go build main.go
+RUN go build -o /bin/main main.go
 
-CMD ["./main"]
+FROM alpine:latest
+COPY --from=builder /bin/main /bin/main
+CMD ["/bin/main"]
+
