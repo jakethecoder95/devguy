@@ -16,13 +16,13 @@ spec:
     spec:
       containers:
         - name: devguy
-          image: jakethecoder95/devguy:v0
+          image: jakethecoder95/devguy:latest
           resources:
             requests:
               cpu: 50m
               memory: 1Mi
               ephemeral-storage: 1Mi
-            limit:
+            limits:
               cpu: 100m
               memory: 2Mi
               ephemeral-storage: 2Mi
