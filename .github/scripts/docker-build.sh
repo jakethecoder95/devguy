@@ -7,6 +7,3 @@ docker buildx build \
 
 docker push "jakethecoder95/devguy:latest"
 docker push "jakethecoder95/devguy:$GITHUB_SHA"
-
-kubectl apply -f k8s
-kubectl set image deployments/devguy-deployment devguy=jakethecoder95/devguy:$GITHUB_SHA
