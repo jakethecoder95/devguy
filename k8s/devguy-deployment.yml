@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: devguy-deployment
+  namespace: web
   labels:
     component: devguy
 spec:
@@ -14,21 +15,17 @@ spec:
       labels:
         component: devguy
     spec:
-      nodeSelector:
-        cloud.google.com/gke-spot: "true"
-      terminationGracePeriodSeconds: 25
       containers:
         - name: devguy
           image: jakethecoder95/devguy:latest
+          imagePullPolicy: Always
           resources:
             requests:
               cpu: 50m
               memory: 1Mi
-              ephemeral-storage: 1Mi
             limits:
               cpu: 100m
               memory: 2Mi
-              ephemeral-storage: 2Mi
           ports:
             - containerPort: 8080
           env:
