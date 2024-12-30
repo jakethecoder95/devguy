@@ -2,11 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: devguy-deployment
-  namespace: web
   labels:
     component: devguy
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       component: devguy
@@ -22,10 +21,10 @@ spec:
           resources:
             requests:
               cpu: 50m
-              memory: 1Mi
+              memory: 100Mi
             limits:
               cpu: 100m
-              memory: 2Mi
+              memory: 200Mi
           ports:
             - containerPort: 8080
           env:
