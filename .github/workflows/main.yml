@@ -50,11 +50,15 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Publish Docker Image
-        run: |
-          docker buildx build --platform "linux/amd64" --tag "jakethecoder95/devguy:latest" --tag "jakethecoder95/devguy:${{ steps.git-sha.ouputs.sha }}" ./app
-          docker push "jakethecoder95/devguy:latest"
-          docker push "jakethecoder95/devguy:${{ steps.git-sha.ouputs.sha }}"
+      - name: Build and push images to quay.io
+        uses: docker/build-push-action@v5
+        with:
+          context: ./app
+          file: Dockerfile
+          push: true
+          tags: |
+            jakethecoder95/devguy:latest
+            jakethecoder95/devguy:latest:${{ steps.git-sha.outputs.sha }}
 
       - name: Trigger update workflow in the manifests repository
         uses: actions/github-script@v6
