@@ -52,12 +52,7 @@ jobs:
 
       - name: Publish Docker Image
         run: |
-          docker buildx build \
-            --platform "linux/amd64" \
-            --tag "jakethecoder95/devguy:latest" \
-            --tag "jakethecoder95/devguy:${{ steps.git-sha.ouputs.sha }}" \
-            ./app
-
+          docker buildx build --platform "linux/amd64" --tag "jakethecoder95/devguy:latest" --tag "jakethecoder95/devguy:${{ steps.git-sha.ouputs.sha }}" ./app
           docker push "jakethecoder95/devguy:latest"
           docker push "jakethecoder95/devguy:${{ steps.git-sha.ouputs.sha }}"
 
