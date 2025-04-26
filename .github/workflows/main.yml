@@ -50,7 +50,7 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and push images to quay.io
+      - name: Build and push images
         uses: docker/build-push-action@v5
         with:
           context: ./
