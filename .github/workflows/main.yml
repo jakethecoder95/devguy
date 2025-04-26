@@ -58,7 +58,7 @@ jobs:
           push: true
           tags: |
             jakethecoder95/devguy:latest
-            jakethecoder95/devguy:latest:${{ steps.git-sha.outputs.sha }}
+            jakethecoder95/devguy:${{ steps.git-sha.outputs.sha }}
 
       - name: Trigger update workflow in the manifests repository
         uses: actions/github-script@v6
