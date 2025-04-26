@@ -15,8 +15,21 @@ jobs:
   build-test-deploy:
     name: Build, Test, and Deploy
     runs-on: ubuntu-latest
+
+    outputs:
+      git-sha: ${{ steps.git-sha.outputs.sha }}
+      git-message: ${{ steps.git-message.outputs.message }}
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set output for Git short SHA
+        id: git-sha
+        run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+
+      - name: Fetch latest commit message
+        id: git-message
+        run: echo "::set-output name=message::$(git log -1 --pretty=format:%s)"
 
       - name: Setup Go
         uses: actions/setup-go@v5.0.0
@@ -37,5 +50,22 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Deploy
+      - name: Publish Docker Image
         run: ./.github/scripts/docker-build.sh
+
+      - name: Trigger update workflow in the manifests repository
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.PAT }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'jakethecoder95',
+              repo: 'homelab-infra',
+              workflow_id: 'update-container-image.yaml',
+              ref: 'main',
+              inputs: {
+                application: 'devguy',
+                message: 'Auto deploy devguy: ${{ steps.git-message.outputs.message }} `${{ steps.git-sha.outputs.sha }}`',
+                version: '${{ steps.git-sha.outputs.sha }}'
+              }
+            })
